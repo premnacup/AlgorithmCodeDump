@@ -1,72 +1,53 @@
-#include <iostream>
+#include <bits/stdc++.h>
+#include <queue>
 #include <vector>
 using namespace std;
 
-struct Node
+void BFS(int start, vector<vector<pair<int, int>>> &graph, vector<int> &visited, int end)
 {
-    int vertex;
-    int weight;
-    Node(int v, int w)
+    queue<int> q;
+    q.push(start);
+    visited[start] = 0;
+
+    while (!q.empty())
     {
-        vertex = v;
-        weight = w;
-    }
-};
+        int current = q.front();
+        q.pop();
 
-void addEdges(int v1, int v2, vector<vector<Node>> &graph)
-{
-    graph[v1 - 1].push_back(Node(v2, 1));
-}
-
-void dfs(int current, int target, vector<vector<Node>> &graph, vector<bool> &visited)
-{
-    if (visited[current])
-        return;
-
-    visited[current] = true;
-    cout << (current + 1) << " ";
-
-    for (const auto &neighbor : graph[current])
-    {
-        if (!visited[neighbor.vertex - 1])
+        for (int i = 0; i < graph[current].size(); i++)
         {
-            dfs(neighbor.vertex - 1, target, graph, visited);
+            if (visited[graph[current][i].first] == -1)
+            {
+                visited[graph[current][i].first] = visited[current] + 1;
+                q.push(graph[current][i].first);
+            }
         }
     }
+    cout << visited[end];
 }
 
 int main()
 {
-    int n;
+    int n, start, end;
     cin >> n;
-    vector<vector<Node>> graph(n);
+    vector<vector<pair<int, int>>> graph(n);
+    vector<int> visited(n, -1);
+
     for (int i = 0; i < n; i++)
     {
-        int src, dest;
+        int src;
         cin >> src;
-        while (true)
+        while (1)
         {
+            int dest;
             cin >> dest;
             if (dest == 0)
+            {
                 break;
-            addEdges(src, dest, graph);
+            }
+            graph[src - 1].push_back({dest - 1, 1});
         }
     }
-
-    cout << "Graph adjacency list:" << endl;
-    for (int i = 0; i < n; i++)
-    {
-        cout << (i + 1) << ": ";
-        for (const auto &node : graph[i])
-        {
-            cout << node.vertex << " ";
-        }
-        cout << endl;
-    }
-
-    int start, goal;
-    cin >> start >> goal;
-
-    vector<bool> visited(n, false);
-    dfs(start - 1, goal - 1, graph, visited);
+    cin >> start >> end;
+    BFS(start - 1, graph, visited, end - 1);
 }
