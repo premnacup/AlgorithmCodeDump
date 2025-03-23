@@ -1,6 +1,5 @@
 #include <iostream>
-#include <algorithm> // Only for sorting
-
+#include <algorithm>
 using namespace std;
 
 const int MAXN = 8000;
@@ -34,7 +33,6 @@ void Subset(int i, int count, int sum, int selected[])
 
 int main()
 {
-
     cin >> N >> M;
     for (int i = 0; i < N; i++)
     {
